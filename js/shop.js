@@ -63,6 +63,9 @@ var products = [
         type: 'clothes'
     }
 ]
+// import { products } from './products.js';
+// const{id,name,price,type,offer}=products;
+
 // Array with products (objects) added directly with push(). Products in this array are repeated.
 var cartList = [];
 
@@ -72,14 +75,29 @@ var cart = [];
 var total = 0;
 
 // Exercise 1
-function buy(id) {
+ function buy(id) {
     // 1. Loop for to the array products to get the item to add to cart
     // 2. Add found product to the cartList array
+    for(let i =0; i<products.length; i++){
+        if(products[i].id == id){
+            cartList.push(products[i]);
+        }
+      console.log('cartList',cartList);
+    }
+    //refactor with find() method
+    //const product = products.find(product => product.id === id);
+    //if (product) {
+    //   cartList.push(product);
+    //  }
 }
 
 // Exercise 2
 function cleanCart() {
-
+if(cartList.length > 0){
+    cartList = [];
+     console.log("Cart cleaned");
+     console.log(cartList);
+}
 }
 
 // Exercise 3
