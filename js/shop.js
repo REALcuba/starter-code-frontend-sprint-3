@@ -88,12 +88,13 @@ function buy (id) {
     if (products[i].id === id) {
       cartList.push(products[i])
     }
-    // console.log('cartList', cartList)
+
+    console.log('cartList', cartList.length)
   }
   cartArr.innerHTML = cartList.map(product => `<tr>
   <th scope="row">${product.name}</th>
     <td>${product.price}</td>
-    <td>${product.id}</td>
+    <td>${cart.quantity}</td>
     <td>${product.type}</td>
   </tr>`)
   calculateTotal()
@@ -109,9 +110,9 @@ function buy (id) {
 function cleanCart () {
   if (cartList.length > 0) {
     cartList = []
-    console.log('Cart cleaned')
+    // console.log('Cart cleaned')
     cartArr.innerHTML = []
-    totalPrice.innerText = ''
+    totalPrice.innerText = cartList
   }
 }
 
@@ -132,6 +133,19 @@ function calculateTotal () {
 function generateCart () {
     // Using the "cartlist" array that contains all the items in the shopping cart,
     // generate the "cart" array that does not contain repeated items, instead each item of this array "cart" shows the quantity of product.
+  for (let i = 0; i < cartList.length; i++) {
+    const item = cartList[i]
+
+    if (!cart.includes(item)) {
+      cart.push(item)
+      item.quantity = 1
+      console.log(item.quantity)
+      console.log(cart)
+    } else {
+      item.quantity++
+      console.log(item.quantity)
+    }
+  }
 }
 
 // Exercise 5
@@ -164,4 +178,3 @@ function open_modal () {
   printCart()
 }
 
-calculateTotal()
