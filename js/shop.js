@@ -82,28 +82,21 @@ const totalPrice = document.getElementById('total_price')
 function buy (id) {
     // 1. Loop for to the array products to get the item to add to cart
     // 2. Add found product to the cartList array
-  const cartArr = document.getElementById('cart_list')
+  // const cartArr = document.getElementById('cart_list')
 
   for (let i = 0; i < products.length; i++) {
     if (products[i].id === id) {
       cartList.push(products[i])
     }
 
-    console.log('cartList', cartList.length)
+    // console.log('cartList', cartList.length)
   }
   cartArr.innerHTML = cartList.map(product => `<tr>
-  <th scope="row">${product.name}</th>
-    <td>${product.price}</td>
-    <td>${cart.quantity}</td>
-    <td>${product.type}</td>
-  </tr>`)
-  calculateTotal()
-            // )
-    // refactor with find() method
-    // const product = products.find(product => product.id === id);
-    // if (product) {
-    //   cartList.push(product);
-    //  }
+   <th scope="row">${product.name}</th>
+     <td>${product.price}</td>
+     <td>${product.quantity}</td>
+     <td>${product.type}</td>
+   </tr>`)
 }
 
 // Exercise 2
@@ -112,19 +105,21 @@ function cleanCart () {
     cartList = []
     // console.log('Cart cleaned')
     cartArr.innerHTML = []
-    totalPrice.innerText = cartList
+    totalPrice.innerText = 0
   }
 }
 
 // Exercise 3
 function calculateTotal () {
     // Calculate total price of the cart using the "cartList" array
-
+  if (cartList.length === 0) {
+    totalPrice.innerText = 0
+  }
   if (cartList.length > 0) {
     for (let i = 0; i < cartList.length; i++) {
       total += cartList[i].price
     }
-    console.log('Total: $' + `${total}`)
+    // console.log('Total: $' + `${total}`)
     totalPrice.innerText = `${total}`
   }
 }
@@ -139,23 +134,52 @@ function generateCart () {
     if (!cart.includes(item)) {
       cart.push(item)
       item.quantity = 1
-      console.log(item.quantity)
-      console.log(cart)
+      // console.log(item.quantity)
     } else {
       item.quantity++
-      console.log(item.quantity)
+      // console.log(item.quantity)
     }
   }
+  applyPromotionsCart()
+  cartArr.innerHTML = cart.map(product => `<tr>
+  <th scope="row">${product.name}</th>
+    <td>${product.price}</td>
+    <td>${product.quantity}</td>
+    <td>${product.type}</td>
+  </tr>`)
+  console.log(cart)
+  return cart // Return cart array with items and quantity in cart
 }
 
 // Exercise 5
 function applyPromotionsCart () {
-    // Apply promotions to each item in the array "cart"
+// Apply promotions to each item in the array "cart"
+// Si el usuario compra 3 o más botellas de aceite, el precio del producto desciende a 10 euros.
+
+  for (let i = 0; i < cart.length; i++) {
+    const product = cart[i]
+    if (product.name === 'cooking oil' && product.quantity >= 3) {
+      product.price = 10
+    }
+// Cuando se compran 10 o más productos para hacer pastel, su precio se rebaja a 2/3.
+    if (product.type === 'grocery' && product.quantity >= 10) {
+      product.price = (product.price * 2 / 3).toFixed(2)
+    }
+  }
 }
 
 // Exercise 6
 function printCart () {
     // Fill the shopping cart modal manipulating the shopping cart dom
+  applyPromotionsCart()
+
+  cartArr.innerHTML = cartList.map(product => `<tr>
+    <th scope="row">${product.name}</th>
+      <td>${product.price}</td>
+      <td>${product.quantity}</td>
+      <td>${product.type}</td>
+    </tr>`
+    )
 }
 
 // ** Nivell II **
@@ -165,6 +189,14 @@ function addToCart (id) {
     // Refactor previous code in order to simplify it
     // 1. Loop for to the array products to get the item to add to cart
     // 2. Add found product to the cart array or update its quantity in case it has been added previously.
+  products.forEach(product => {
+    if (product.id === id) {
+      product.quantity = 1
+      cart.find(product => product.id === id) ? product.quantity++ : cart.push(product)
+    }
+  }
+
+  )
 }
 
 // Exercise 8
@@ -176,5 +208,6 @@ function removeFromCart (id) {
 function open_modal () {
   console.log('Open Modal')
   printCart()
+  calculateTotal()
 }
 
