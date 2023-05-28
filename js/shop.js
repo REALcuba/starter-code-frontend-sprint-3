@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 /* eslint-disable no-unused-vars */
+
 // If you have time, you can move this variable "products" to a json or js file and load the data in this js. It will look more professional
 var products = [
   {
@@ -65,7 +66,7 @@ var products = [
     type: 'clothes'
   }
 ]
-// import { products } from './products.js';
+// import {products } from './products.js'
 // Array with products (objects) added directly with push(). Products in this array are repeated.
 var cartList = []
 
@@ -77,6 +78,7 @@ var total = 0
 // getElements
 const cartArr = document.getElementById('cart_list')
 const totalPrice = document.getElementById('total_price')
+var cartCount = document.getElementById('count_product')
 
 // Exercise 1
 function buy (id) {
@@ -87,66 +89,54 @@ function buy (id) {
   for (let i = 0; i < products.length; i++) {
     if (products[i].id === id) {
       cartList.push(products[i])
+      cartCount.innerHTML = cartList.length
     }
-
-    // console.log('cartList', cartList.length)
   }
-  cartArr.innerHTML = cartList.map(product => `<tr>
-   <th scope="row">${product.name}</th>
-     <td>${product.price}</td>
-     <td>${product.quantity}</td>
-     <td>${product.type}</td>
-   </tr>`)
 }
 
 // Exercise 2
 function cleanCart () {
-  if (cartList.length > 0) {
+  if (cartList.length >= 0) {
     cartList = []
+    cart = []
     // console.log('Cart cleaned')
     cartArr.innerHTML = []
+    console.log(cartList)
+    total = 0
+    // cartList.product.quantity = 0
     totalPrice.innerText = 0
+    cartCount.innerHTML = 0
   }
 }
 
 // Exercise 3
 function calculateTotal () {
     // Calculate total price of the cart using the "cartList" array
-  if (cartList.length === 0) {
-    totalPrice.innerText = 0
+  total = 0
+  for (let i = 0; i < cartList.length; i++) {
+    total += cartList[i].price
   }
-  if (cartList.length > 0) {
-    for (let i = 0; i < cartList.length; i++) {
-      total += cartList[i].price
-    }
-    // console.log('Total: $' + `${total}`)
-    totalPrice.innerText = `${total}`
-  }
+  console.log('Total: $' + `${total}`)
+  return total
 }
 
 // Exercise 4
 function generateCart () {
     // Using the "cartlist" array that contains all the items in the shopping cart,
     // generate the "cart" array that does not contain repeated items, instead each item of this array "cart" shows the quantity of product.
+  cart = []
   for (let i = 0; i < cartList.length; i++) {
-    const item = cartList[i]
+    const product = cartList[i]
 
-    if (!cart.includes(item)) {
-      cart.push(item)
-      item.quantity = 1
-      // console.log(item.quantity)
+    if (!cart.includes(product)) {
+      cart.push(product)
+      product.quantity = 1
     } else {
-      item.quantity++
-      // console.log(item.quantity)
+      product.quantity++
     }
+    product.subtotal
   }
-  applyPromotionsCart()
-  cartArr.innerHTML = cart.map(product => `<tr>
-  <th scope="row">${product.name}</th>
-    <td>${product.price}</td>
-    <td>${product.quantity}</td>
-    <td>${product.type}</td>
-  </tr>`)
+
   console.log(cart)
   return cart // Return cart array with items and quantity in cart
 }
@@ -158,28 +148,41 @@ function applyPromotionsCart () {
 
   for (let i = 0; i < cart.length; i++) {
     const product = cart[i]
+    var groceryQty = 0
+    // Cuando se compran 10 o más productos para hacer pastel, su precio se rebaja a 2/3.
     if (product.name === 'cooking oil' && product.quantity >= 3) {
       product.price = 10
+      product.subTotalWithDiscount = (product.price * product.quantity)
     }
-// Cuando se compran 10 o más productos para hacer pastel, su precio se rebaja a 2/3.
-    if (product.type === 'grocery' && product.quantity >= 10) {
-      product.price = (product.price * 2 / 3).toFixed(2)
+
+    cart.forEach(product => {
+      if (product.type === 'grocery') {
+        groceryQty += product.quantity
+      }
+      return groceryQty
+    })
+
+    if (product.type === 'grocery' && groceryQty >= 10) {
+      product.subTotalWithDiscount = ((product.price * (2 / 3)) * product.quantity)
+    } else {
+      product.subTotalWithDiscount = (product.price * product.quantity)
     }
+    calculateTotal()
   }
 }
 
 // Exercise 6
 function printCart () {
     // Fill the shopping cart modal manipulating the shopping cart dom
+  generateCart()
   applyPromotionsCart()
-
-  cartArr.innerHTML = cartList.map(product => `<tr>
-    <th scope="row">${product.name}</th>
-      <td>${product.price}</td>
-      <td>${product.quantity}</td>
-      <td>${product.type}</td>
-    </tr>`
-    )
+  cartArr.innerHTML = cart.map(product => `<tr>
+  <th scope="row">${product.name}</th>
+    <td>$${product.price.toFixed(2)}</td>
+    <td>${product.quantity}</td>
+    <td>$${(product.subTotalWithDiscount).toFixed(2)}</td>
+  </tr>`).join('')
+  totalPrice.innerHTML = total.toFixed(2)
 }
 
 // ** Nivell II **
@@ -208,6 +211,6 @@ function removeFromCart (id) {
 function open_modal () {
   console.log('Open Modal')
   printCart()
-  calculateTotal()
+  // calculateTotal()
 }
 
