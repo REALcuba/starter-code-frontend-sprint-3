@@ -75,16 +75,13 @@ var cart = []
 
 var total = 0
 
-// getElements
-const cartArr = document.getElementById('cart_list')
-const totalPrice = document.getElementById('total_price')
-var cartCount = document.getElementById('count_product')
+var discount = 0
 
 // Exercise 1
 function buy (id) {
-    // 1. Loop for to the array products to get the item to add to cart
-    // 2. Add found product to the cartList array
-  // const cartArr = document.getElementById('cart_list')
+  // 1. Loop for to the array products to get the item to add to cart
+  // 2. Add found product to the cartList array
+  // 3. Update the cart count badge
 
   for (let i = 0; i < products.length; i++) {
     if (products[i].id === id) {
@@ -93,6 +90,11 @@ function buy (id) {
     }
   }
 }
+var totalWithDiscount = 0
+// getElements
+const cartArr = document.getElementById('cart_list')
+const totalPrice = document.getElementById('total_price')
+var cartCount = document.getElementById('count_product')
 
 // Exercise 2
 function cleanCart () {
@@ -102,7 +104,6 @@ function cleanCart () {
     // console.log('Cart cleaned')
     cartArr.innerHTML = []
     console.log(cartList)
-    total = 0
     // cartList.product.quantity = 0
     totalPrice.innerText = 0
     cartCount.innerHTML = 0
@@ -112,7 +113,6 @@ function cleanCart () {
 // Exercise 3
 function calculateTotal () {
     // Calculate total price of the cart using the "cartList" array
-  total = 0
   for (let i = 0; i < cartList.length; i++) {
     total += cartList[i].price
   }
@@ -124,7 +124,7 @@ function calculateTotal () {
 function generateCart () {
     // Using the "cartlist" array that contains all the items in the shopping cart,
     // generate the "cart" array that does not contain repeated items, instead each item of this array "cart" shows the quantity of product.
-  cart = []
+
   for (let i = 0; i < cartList.length; i++) {
     const product = cartList[i]
 
@@ -134,7 +134,6 @@ function generateCart () {
     } else {
       product.quantity++
     }
-    product.subtotal
   }
 
   console.log(cart)
@@ -145,11 +144,39 @@ function generateCart () {
 function applyPromotionsCart () {
 // Apply promotions to each item in the array "cart"
 // Si el usuario compra 3 o más botellas de aceite, el precio del producto desciende a 10 euros.
-
+// Cuando se compran 10 o más productos para hacer pastel, su precio se rebaja a 2/3.
+//   for (let i = 0; i < cart.length; i++) {
+//     const product = cart[i]
+//     var groceryQty = 0
+//     //promo1
+//     if (product.name === 'cooking oil' && product.quantity >= 3) {
+//       product.price = 10
+//       product.subTotalWithDiscount = (product.price * product.quantity)
+//     }
+// //find groceryQty
+//     cart.forEach(product => {
+//       if (product.type === 'grocery') {
+//         groceryQty += product.quantity
+//       }
+//       return groceryQty
+//     })
+// //promo 2
+//     if (product.type === 'grocery' && groceryQty >= 10) {
+//       product.subTotalWithDiscount = ((product.price * (2 / 3)) * product.quantity)
+//     } else {
+//       product.subTotal = (product.price * product.quantity)
+//     }
+//     // if (product.subTotalWithDiscount) {
+//     //   discount = product.subTotal - product.subTotalWithDiscount
+//     //   console.log(`total ${total} + discount:${discount}`);
+//     //   totalWithDiscount = total - discount
+//     // }
+//     // calculateTotal()
+//   }
   for (let i = 0; i < cart.length; i++) {
     const product = cart[i]
     var groceryQty = 0
-    // Cuando se compran 10 o más productos para hacer pastel, su precio se rebaja a 2/3.
+  // Cuando se compran 10 o más productos para hacer pastel, su precio se rebaja a 2/3.
     if (product.name === 'cooking oil' && product.quantity >= 3) {
       product.price = 10
       product.subTotalWithDiscount = (product.price * product.quantity)
@@ -167,40 +194,102 @@ function applyPromotionsCart () {
     } else {
       product.subTotalWithDiscount = (product.price * product.quantity)
     }
-    calculateTotal()
   }
+  calculateTotal()
 }
-
+// function calculateSubtotal (product) {
+//   return product.price * product.quantity
+// }
 // Exercise 6
 function printCart () {
     // Fill the shopping cart modal manipulating the shopping cart dom
   generateCart()
   applyPromotionsCart()
-  cartArr.innerHTML = cart.map(product => `<tr>
+  cartArr.innerHTML = cart.map(product =>
+    `<tr>
   <th scope="row">${product.name}</th>
     <td>$${product.price.toFixed(2)}</td>
     <td>${product.quantity}</td>
-    <td>$${(product.subTotalWithDiscount).toFixed(2)}</td>
+    <td>$${product.subTotalWithDiscount.toFixed(2)}</td>
   </tr>`).join('')
+
   totalPrice.innerHTML = total.toFixed(2)
+  // totalPrice.innerHTML = totalWithDiscount.toFixed(2)
 }
 
 // ** Nivell II **
 
 // Exercise 7
-function addToCart (id) {
-    // Refactor previous code in order to simplify it
-    // 1. Loop for to the array products to get the item to add to cart
-    // 2. Add found product to the cart array or update its quantity in case it has been added previously.
-  products.forEach(product => {
-    if (product.id === id) {
-      product.quantity = 1
-      cart.find(product => product.id === id) ? product.quantity++ : cart.push(product)
-    }
-  }
+// function addToCart (id) {
+//     // Refactor previous code in order to simplify it
+//     // 1. Loop for to the array products to get the item to add to cart
+//     // 2. Add found product to the cart array or update its quantity in case it has been added previously.
+//   const productToAdd = products.find((product) => product.id === id)
 
-  )
-}
+//   if (productToAdd) {
+//     cartList.push(productToAdd)
+//     cartCount.innerHTML = cartList.length
+//   }
+
+//   const cart = cartList.filter((product, index, self) => {
+//     const existingProductIndex = self.findIndex((p) => p.id === product.id)
+//     const existingProduct = self[existingProductIndex]
+
+//     if (existingProductIndex !== index) {
+//       existingProduct.quantity++
+//       existingProduct.subtotal = calculateSubtotal(existingProduct)
+//       return false
+//     }
+
+//     product.quantity = 1
+//     product.subtotal = calculateSubtotal(product)
+//     return true
+//   })
+
+//   console.log(cart)
+//   cartCount.innerHTML = cart.length
+
+//   return cart
+//   // products.map(product => {
+//   //   if (product.id === id) {
+//   //     product.quantity = 0
+//   //     cart.push(product)
+//   //   }
+//   //   cart.find(product => product.id === id) ? product.quantity++ : cart.push(product)
+//   //   console.log(product.quantity)
+//   //   console.log('cart' + cart)
+//   //   // if (cart.includes(product)) {
+//   //     // }
+//   // }
+//     // )
+// }
+
+// function buyAndGenerateCart (id) {
+//   const productToAdd = products.find((product) => product.id === id)
+
+//   if (productToAdd) {
+//     cartList.push(productToAdd)
+//     cartCount.innerHTML = cartList.length
+//   }
+
+//   const cart = cartList.filter((product, index, self) => {
+//     const existingProductIndex = self.findIndex((p) => p.id === product.id)
+//     const existingProduct = self[existingProductIndex]
+
+//     if (existingProductIndex !== index) {
+//       existingProduct.quantity++
+//       existingProduct.subtotal = calculateSubtotal(existingProduct)
+//       return false
+//     }
+
+//     product.quantity = 1
+//     product.subtotal = calculateSubtotal(product)
+//     return true
+//   })
+
+//   console.log(cart)
+//   return cart
+// }
 
 // Exercise 8
 function removeFromCart (id) {
@@ -211,6 +300,5 @@ function removeFromCart (id) {
 function open_modal () {
   console.log('Open Modal')
   printCart()
-  // calculateTotal()
 }
 
