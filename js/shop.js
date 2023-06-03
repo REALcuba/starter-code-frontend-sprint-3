@@ -113,8 +113,11 @@ function cleanCart () {
 // Exercise 3
 function calculateTotal () {
     // Calculate total price of the cart using the "cartList" array
-  for (let i = 0; i < cartList.length; i++) {
-    total += cartList[i].price
+  total = 0
+
+  for (let i = 0; i < cart.length; i++) {
+    console.log(cart[i])
+    total += cart[i].subTotalWithDiscount
   }
   console.log('Total: $' + `${total}`)
   return total
@@ -124,7 +127,7 @@ function calculateTotal () {
 function generateCart () {
     // Using the "cartlist" array that contains all the items in the shopping cart,
     // generate the "cart" array that does not contain repeated items, instead each item of this array "cart" shows the quantity of product.
-
+  cart = []
   for (let i = 0; i < cartList.length; i++) {
     const product = cartList[i]
 
@@ -144,56 +147,39 @@ function generateCart () {
 function applyPromotionsCart () {
 // Apply promotions to each item in the array "cart"
 // Si el usuario compra 3 o más botellas de aceite, el precio del producto desciende a 10 euros.
-// Cuando se compran 10 o más productos para hacer pastel, su precio se rebaja a 2/3.
-//   for (let i = 0; i < cart.length; i++) {
-//     const product = cart[i]
-//     var groceryQty = 0
-//     //promo1
-//     if (product.name === 'cooking oil' && product.quantity >= 3) {
-//       product.price = 10
-//       product.subTotalWithDiscount = (product.price * product.quantity)
-//     }
-// //find groceryQty
-//     cart.forEach(product => {
-//       if (product.type === 'grocery') {
-//         groceryQty += product.quantity
-//       }
-//       return groceryQty
-//     })
-// //promo 2
-//     if (product.type === 'grocery' && groceryQty >= 10) {
-//       product.subTotalWithDiscount = ((product.price * (2 / 3)) * product.quantity)
-//     } else {
-//       product.subTotal = (product.price * product.quantity)
-//     }
-//     // if (product.subTotalWithDiscount) {
-//     //   discount = product.subTotal - product.subTotalWithDiscount
-//     //   console.log(`total ${total} + discount:${discount}`);
-//     //   totalWithDiscount = total - discount
-//     // }
-//     // calculateTotal()
-//   }
   for (let i = 0; i < cart.length; i++) {
     const product = cart[i]
     var groceryQty = 0
-  // Cuando se compran 10 o más productos para hacer pastel, su precio se rebaja a 2/3.
+    // product.subTotal = 0
+    // product.subTotalWithDiscount = 0
+    // promo 1
     if (product.name === 'cooking oil' && product.quantity >= 3) {
       product.price = 10
       product.subTotalWithDiscount = (product.price * product.quantity)
     }
-
+    // get groceryQty
     cart.forEach(product => {
       if (product.type === 'grocery') {
         groceryQty += product.quantity
       }
       return groceryQty
     })
-
+    // promo 2
+    // Cuando se compran 10 o más productos para hacer pastel, su precio se rebaja a 2/3.
     if (product.type === 'grocery' && groceryQty >= 10) {
       product.subTotalWithDiscount = ((product.price * (2 / 3)) * product.quantity)
     } else {
       product.subTotalWithDiscount = (product.price * product.quantity)
     }
+    // if (product.subTotal === 0 && product.subTotalWithDiscount > 0) {
+    //   discount = product.subTotalWithDiscount - product.subTotal
+    //   console.log(`total ${total} + discount:${discount}`)
+    //   totalWithDiscount = total - discount
+    // }
+    // if (product.subTotal > 0 && product.subTotalWithDiscount === 0) {
+    //   discount = product.subTotal - product.subTotalWithDiscount
+    //   totalWithDiscount = discount - total
+    // }
   }
   calculateTotal()
 }
@@ -213,7 +199,7 @@ function printCart () {
     <td>$${product.subTotalWithDiscount.toFixed(2)}</td>
   </tr>`).join('')
 
-  totalPrice.innerHTML = total.toFixed(2)
+  totalPrice.innerHTML = (total).toFixed(2)
   // totalPrice.innerHTML = totalWithDiscount.toFixed(2)
 }
 
