@@ -61,7 +61,7 @@
      error++
    }
    if (error > 0) {
-	   alert('Error')
+     alert('Error')
    } else {
      alert('OK')
    }
