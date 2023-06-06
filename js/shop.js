@@ -151,7 +151,7 @@ function applyPromotionsCart () {
     const product = cart[i]
     let groceryQty = 0
 
-    // get groceryQty
+    // get groceryQty for type grosery
     cart.forEach(product => {
       if (product.type === 'grocery') {
         groceryQty += product.quantity
@@ -177,8 +177,6 @@ function applyPromotionsCart () {
 // Exercise 6
 function printCart () {
     // Fill the shopping cart modal manipulating the shopping cart dom
-  // generateCart()
-  // addToCart()
   applyPromotionsCart()
   cartArr.innerHTML = cart.map(product =>
     `<tr>
@@ -206,7 +204,6 @@ function addToCart (id) {
   if (productToAdd) {
     cartList.push(productToAdd)
   }
-  cartCount.innerHTML = cartList.length
 
       // Fill the cart array from the cartList array
   cart = cartList.reduce((acc, product) => {
@@ -215,30 +212,42 @@ function addToCart (id) {
 
     return acc
   }, [])
+
+  cartCount.innerHTML = getCounterValue()
+
   return cart
 }
+// get total cartCount Value
+const getCounterValue = () => cart.reduce((cartCountValue, item) => {
+  let cartValue = cartCountValue + item.quantity
+  // cartCountValue = 0
+  return cartValue
+}, 0)
 
 // Exercise 8
 function removeFromCart (id) {
     // 1. Loop for to the array products to get the item to remove from cart
     // 2. remove found product from the cartList array
   const productToRemove = cart.find((product) => product.id === id)
-  const index = cartList.findIndex((product) => product.id === id)
+  // const index = cartList.findIndex((product) => product.id === id)
 
   if (productToRemove.quantity === 1) {
     cart = cart.filter(function (i) { return i !== productToRemove }) // filtramos
     console.log(cart)
-    cartCount.innerHTML = (cartList.length - 1)
+    // cartCount.innerHTML = getCounterValue()
+
     // return cartList
   } else {
     productToRemove.quantity--
-    // generateCart()
+    // cartCount.innerHTML = getCounterValue()
+    // cartValue = 0
   }
-  // cart = cartList
+  applyPromotionsCart(cart)
   console.log(cart)
   printCart()
 
   console.log('cart after splice' + `${cart}`)
+  cartCount.innerHTML = getCounterValue(cart)
   return cart
 }
 

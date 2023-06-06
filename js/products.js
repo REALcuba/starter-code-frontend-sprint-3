@@ -7,7 +7,8 @@ export var products = [
     offer: {
       number: 3,
       percent: 20
-    }
+    },
+    image: 'https://healthywithjamie.com/wp-content/uploads/2019/06/Healthiest-Cooking-Oils.png'
   },
   {
     id: 2,
