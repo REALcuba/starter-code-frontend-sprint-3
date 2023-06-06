@@ -9,7 +9,7 @@
    var fLastN = document.getElementById('fLastN')
    var fPhone = document.getElementById('fPhone')
    var fPassword = document.getElementById('fPassword')
-//    var form = document.getElementById('form')
+   var form = document.getElementById('form')
 
 // Get the error elements
    var errorName = document.getElementById('errorName')
@@ -65,8 +65,8 @@
    } else {
      alert('OK')
    }
-//    if (name && lastName && phone && password && email) {
-//      form.submit()
-//    }
+   if (name && lastName && phone && password && email) {
+     form.submit()
+   }
  }
 

@@ -124,24 +124,24 @@ function calculateTotal () {
 }
 
 // Exercise 4
-// function generateCart () {
-//     // Using the "cartlist" array that contains all the items in the shopping cart,
-//     // generate the "cart" array that does not contain repeated items, instead each item of this array "cart" shows the quantity of product.
-//   cart = []
-//   for (let i = 0; i < cartList.length; i++) {
-//     const product = cartList[i]
+function generateCart () {
+    // Using the "cartlist" array that contains all the items in the shopping cart,
+    // generate the "cart" array that does not contain repeated items, instead each item of this array "cart" shows the quantity of product.
+  cart = []
+  for (let i = 0; i < cartList.length; i++) {
+    const product = cart[i]
 
-//     if (!cart.includes(product)) {
-//       cart.push(product)
-//       product.quantity = 1
-//     } else {
-//       product.quantity++
-//     }
-//   }
+    if (!cart.includes(product)) {
+      cart.push(product)
+      product.quantity = 1
+    } else {
+      product.quantity++
+    }
+  }
 
-//   console.log(cart)
-//   return cart // Return cart array with items and quantity in cart
-// }
+  console.log(cart)
+  return cart // Return cart array with items and quantity in cart
+}
 
 // Exercise 5
 function applyPromotionsCart () {
@@ -149,7 +149,7 @@ function applyPromotionsCart () {
 // Si el usuario compra 3 o más botellas de aceite, el precio del producto desciende a 10 euros.
   for (let i = 0; i < cart.length; i++) {
     const product = cart[i]
-    var groceryQty = 0
+    let groceryQty = 0
 
     // get groceryQty
     cart.forEach(product => {
@@ -178,13 +178,13 @@ function applyPromotionsCart () {
 function printCart () {
     // Fill the shopping cart modal manipulating the shopping cart dom
   // generateCart()
-  addToCart()
+  // addToCart()
   applyPromotionsCart()
   cartArr.innerHTML = cart.map(product =>
     `<tr>
   <th scope="row">${product.name}</th>
     <td>$${product.price.toFixed(2)}</td>
-    <td>${product.quantity}</td>
+    <td>${product.quantity}<button onClick="removeFromCart(${product.id})">remove</button>  </td> 
     <td>$${product.subTotalWithDiscount.toFixed(2)}</td>
   </tr>`).join('')
 
@@ -205,8 +205,8 @@ function addToCart (id) {
       // If the product exists, add it to the cartList array and update the cart count badge
   if (productToAdd) {
     cartList.push(productToAdd)
-    cartCount.innerHTML = cartList.length
   }
+  cartCount.innerHTML = cartList.length
 
       // Fill the cart array from the cartList array
   cart = cartList.reduce((acc, product) => {
@@ -215,14 +215,31 @@ function addToCart (id) {
 
     return acc
   }, [])
-
   return cart
 }
 
 // Exercise 8
 function removeFromCart (id) {
-    // 1. Loop for to the array products to get the item to add to cart
-    // 2. Add found product to the cartList array
+    // 1. Loop for to the array products to get the item to remove from cart
+    // 2. remove found product from the cartList array
+  const productToRemove = cart.find((product) => product.id === id)
+  const index = cartList.findIndex((product) => product.id === id)
+
+  if (productToRemove.quantity === 1) {
+    cart = cart.filter(function (i) { return i !== productToRemove }) // filtramos
+    console.log(cart)
+    cartCount.innerHTML = (cartList.length - 1)
+    // return cartList
+  } else {
+    productToRemove.quantity--
+    // generateCart()
+  }
+  // cart = cartList
+  console.log(cart)
+  printCart()
+
+  console.log('cart after splice' + `${cart}`)
+  return cart
 }
 
 function open_modal () {
