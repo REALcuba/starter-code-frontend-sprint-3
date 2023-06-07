@@ -160,17 +160,19 @@ function applyPromotionsCart () {
     })
     // promo 1
     if (product.name === 'cooking oil' && product.quantity >= 3) {
-      product.price = 10
-      product.subTotalWithDiscount = (product.price * product.quantity)
-    }
-    // promo 2
-    // Cuando se compran 10 o más productos para hacer pastel, su precio se rebaja a 2/3.
-    if (product.type === 'grocery' && groceryQty >= 10) {
+      const price = 10
+      // product.price = 10
+      product.subTotalWithDiscount = price * product.quantity
+      console.log(product.subTotalWithDiscount)
+      // promo 2
+      // Cuando se compran 10 o más productos para hacer pastel, su precio se rebaja a 2/3.
+    } else if (product.type === 'grocery' && groceryQty >= 10) {
       product.subTotalWithDiscount = ((product.price * (2 / 3)) * product.quantity)
     } else {
       product.subTotalWithDiscount = (product.price * product.quantity)
     }
   }
+
   calculateTotal()
 }
 
@@ -220,7 +222,6 @@ function addToCart (id) {
 // get total cartCount Value
 const getCounterValue = () => cart.reduce((cartCountValue, item) => {
   let cartValue = cartCountValue + item.quantity
-  // cartCountValue = 0
   return cartValue
 }, 0)
 
@@ -234,15 +235,10 @@ function removeFromCart (id) {
   if (productToRemove.quantity === 1) {
     cart = cart.filter(function (i) { return i !== productToRemove }) // filtramos
     console.log(cart)
-    // cartCount.innerHTML = getCounterValue()
-
-    // return cartList
   } else {
     productToRemove.quantity--
-    // cartCount.innerHTML = getCounterValue()
-    // cartValue = 0
   }
-  applyPromotionsCart(cart)
+  // applyPromotionsCart(cart)
   console.log(cart)
   printCart()
 
