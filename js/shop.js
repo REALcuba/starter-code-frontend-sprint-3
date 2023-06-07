@@ -1,3 +1,4 @@
+/* eslint-disable no-debugger */
 /* eslint-disable camelcase */
 /* eslint-disable no-unused-vars */
 
@@ -122,24 +123,24 @@ function calculateTotal () {
 }
 
 // Exercise 4
-function generateCart () {
-    // Using the "cartlist" array that contains all the items in the shopping cart,
-    // generate the "cart" array that does not contain repeated items, instead each item of this array "cart" shows the quantity of product.
-  cart = []
-  for (let i = 0; i < cartList.length; i++) {
-    const product = cart[i]
+// function generateCart () {
+//     // Using the "cartlist" array that contains all the items in the shopping cart,
+//     // generate the "cart" array that does not contain repeated items, instead each item of this array "cart" shows the quantity of product.
+//   cart = []
+//   for (let i = 0; i < cartList.length; i++) {
+//     const product = cart[i]
 
-    if (!cart.includes(product)) {
-      cart.push(product)
-      product.quantity = 1
-    } else {
-      product.quantity++
-    }
-  }
+//     if (!cart.includes(product)) {
+//       cart.push(product)
+//       product.quantity = 1
+//     } else {
+//       product.quantity++
+//     }
+//   }
 
-  console.log(cart)
-  return cart // Return cart array with items and quantity in cart
-}
+//   console.log(cart)
+//   return cart // Return cart array with items and quantity in cart
+// }
 
 // Exercise 5
 function applyPromotionsCart () {
@@ -196,22 +197,13 @@ function addToCart (id) {
     // Refactor previous code in order to simplify it
     // 1. Loop for to the array products to get the item to add to cart
     // 2. Add found product to the cart array or update its quantity in case it has been added previously.
-
     // Find the product with the given ID
   const productToAdd = products.find((product) => product.id === id)
 
       // If the product exists, add it to the cartList array and update the cart count badge
-  if (productToAdd) {
-    cartList.push(productToAdd)
-  }
-
+  const existingProduct = cart.find((p) => p.id === productToAdd.id)
+  existingProduct ? existingProduct.quantity++ : cart.push({ ...productToAdd, quantity: 1 })
       // Fill the cart array from the cartList array
-  cart = cartList.reduce((acc, product) => {
-    const existingProduct = acc.find((p) => p.id === product.id)
-    existingProduct ? existingProduct.quantity++ : acc.push({ ...product, quantity: 1 })
-
-    return acc
-  }, [])
 
   cartCount.innerHTML = getCounterValue()
 
@@ -227,7 +219,6 @@ function removeFromCart (id) {
     // 1. Loop for to the array products to get the item to remove from cart
     // 2. remove found product from the cartList array
   const productToRemove = cart.find((product) => product.id === id)
-  // const index = cartList.findIndex((product) => product.id === id)
 
   if (productToRemove.quantity === 1) {
     cart = cart.filter(function (i) { return i !== productToRemove }) // filtramos
@@ -235,7 +226,6 @@ function removeFromCart (id) {
   } else {
     productToRemove.quantity--
   }
-  console.log(cart)
   printCart()
   cartCount.innerHTML = getCounterValue()
   return cart
