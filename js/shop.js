@@ -103,9 +103,7 @@ function cleanCart () {
     cart = []
     // console.log('Cart cleaned')
     cartArr.innerHTML = []
-    console.log(cartList)
-    // cartList.product.quantity = 0
-    totalPrice.innerText = 0
+    totalPrice.innerText = 0.00
     cartCount.innerHTML = 0
   }
 }
@@ -183,7 +181,7 @@ function printCart () {
   cartArr.innerHTML = cart.map(product =>
     `<tr>
   <th scope="row">${product.name}</th>
-    <td>$${product.price.toFixed(2)}</td>
+    <td>$${product.price}</td>
     <td>${product.quantity}<button onClick="removeFromCart(${product.id})">remove</button>  </td> 
     <td>$${product.subTotalWithDiscount.toFixed(2)}</td>
   </tr>`).join('')
@@ -221,8 +219,7 @@ function addToCart (id) {
 }
 // get total cartCount Value
 const getCounterValue = () => cart.reduce((cartCountValue, item) => {
-  let cartValue = cartCountValue + item.quantity
-  return cartValue
+  return cartCountValue + item.quantity
 }, 0)
 
 // Exercise 8
@@ -238,12 +235,9 @@ function removeFromCart (id) {
   } else {
     productToRemove.quantity--
   }
-  // applyPromotionsCart(cart)
   console.log(cart)
   printCart()
-
-  console.log('cart after splice' + `${cart}`)
-  cartCount.innerHTML = getCounterValue(cart)
+  cartCount.innerHTML = getCounterValue()
   return cart
 }
 
